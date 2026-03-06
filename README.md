@@ -33,5 +33,9 @@ From our test cases, we notice that OPTFF has the fewest number of misses in all
 
 From our test cases, we see that LRU and FIFO have roughly the same number of cache misses. However, this may be because our data was randomly generated. LRU often performs better in the real world because recently accessed items are more likely to be accessed again.
 
+## Question 2
+Yes, such a sequence exists. Take the sequence used in test1 with cache capacity 3 and 50 requests:
 
+4 4 5 1 2 4 4 3 6 2 1 5 4 3 1 2 6 3 1 4 2 5 3 4 4 3 6 3 4 2 6 3 6 3 2 4 2 4 5 4 1 5 1 2 2 2 3 5 3 2
 
+This sequence has 19 cache misses for OPTFF and 32 cache misses for LRU and 31 cache misses for FIFO. OPTFF has strictly fewer cache misses than both LRU and FIFO.
