@@ -1,3 +1,4 @@
+import random
 from collections import deque
 
 def fifo(k, requests):
@@ -76,10 +77,47 @@ def optff(k, requests):
         cache.add(r)
     
     return misses
+
+def create_input_files(number_of_requests=50):
+
+    for indx in range(3):
+        k = random.randint(3, 11)
+        random_requests = [random.randint(1, 2*k) for i in range(number_of_requests)]
+
+        filename = f"../tests/test{indx + 1}.in"
+        with open(filename, "w") as f:
+            f.write(f"{k} {number_of_requests}\n")
+            for i, r in enumerate(random_requests):
+                f.write(str(r) + " ") if i != len(random_requests) - 1 else f.write(str(r))
+
+def run_tests():
+    create_input_files()
+    base_name = "../tests/"
+    test_files = ["test1", "test2", "test3"]
+
+    for file in test_files:
+        input_file = base_name + file + ".in"
+        output_file = base_name + file + ".out"
+
+        with open(input_file, "r") as f:
+            k, m = map(int, f.readline().split())
+            requests = list(map(int, f.readline().split()))
     
+        fifo_misses = fifo(k, requests)
+        lru_misses = lru(k, requests)
+        optff_misses = optff(k, requests)
+
+        with open(output_file, "w") as f:
+            f.write(f"FIFO  : {fifo_misses}\n")
+            f.write(f"LRU   : {lru_misses}\n")
+            f.write(f"OPTFF : {optff_misses}")
+
 def main():
-    file_path = "../tests/simple_test.in"
-    output_path = "../tests/simple_test.out"
+    # run_tests()
+    
+    base_name = "../data/"
+    file_path = base_name + "input.in"
+    output_path = base_name + "output.out"
 
     with open(file_path, "r") as f:
         k, m = map(int, f.readline().split())
