@@ -1,2 +1,3 @@
-FIFO  : 5
-LRU   : 5
+FIFO  : 6
+LRU   : 6
+OPTFF : 4
