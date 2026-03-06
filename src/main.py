@@ -79,6 +79,7 @@ def optff(k, requests):
     return misses
 
 def create_input_files(number_of_requests=50):
+    random.seed(10)
 
     for indx in range(3):
         k = random.randint(3, 11)
