@@ -20,3 +20,18 @@ r_1 r_2 r_3 ... r_m
 Where k is cache capacity with k >= 1, m is number of requests and r_1, .., r_m is sequence of integer IDs.
 
 The output gives the number of misses for FIFO, LRU and OPTFF cache eviction policies.
+
+## Question 1
+
+| Input File | k | m | FIFO | LRU | OPTFF |
+| --- | --- | --- | --- | --- | --- |
+| test1 | 3 | 50 | 31 | 32 | 19 |
+| test2 | 8 | 50 | 28 | 30 | 21 |
+| test3 | 7 | 50 | 25 | 23 | 16 |
+
+From our test cases, we notice that OPTFF has the fewest number of misses in all test cases which confirms theoretical results. Additionally, compared to FIFO and LRU it is a significant improvement with around 33% less misses.
+
+From our test cases, we see that LRU and FIFO have roughly the same number of cache misses. However, this may be because our data was randomly generated. LRU often performs better in the real world because recently accessed items are more likely to be accessed again.
+
+
+
