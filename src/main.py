@@ -113,28 +113,32 @@ def run_tests():
             f.write(f"OPTFF : {optff_misses}")
 
 def main():
-    # run_tests()
+    user_choice = input("Would you like to run custom or standard tests? [custom/standard] ")
+
+    if user_choice.lower() == "standard":
+        run_tests()
     
-    base_name = "../data/"
-    file_path = base_name + "input.in"
-    output_path = base_name + "output.out"
+    elif user_choice.lower() == "custom":
+        base_name = "../data/"
+        file_path = base_name + "input.in"
+        output_path = base_name + "output.out"
 
-    with open(file_path, "r") as f:
-        k, m = map(int, f.readline().split())
-        requests = list(map(int, f.readline().split()))
+        with open(file_path, "r") as f:
+            k, m = map(int, f.readline().split())
+            requests = list(map(int, f.readline().split()))
 
-    fifo_misses = fifo(k, requests)
-    lru_misses = lru(k, requests)
-    optff_misses = optff(k, requests)
+        fifo_misses = fifo(k, requests)
+        lru_misses = lru(k, requests)
+        optff_misses = optff(k, requests)
 
-    with open(output_path, "w") as f:
-        f.write(f"FIFO  : {fifo_misses}\n")
-        f.write(f"LRU   : {lru_misses}\n")
-        f.write(f"OPTFF : {optff_misses}")
+        with open(output_path, "w") as f:
+            f.write(f"FIFO  : {fifo_misses}\n")
+            f.write(f"LRU   : {lru_misses}\n")
+            f.write(f"OPTFF : {optff_misses}")
 
-    print(f"FIFO  : {fifo_misses}")
-    print(f"LRU   : {lru_misses}")
-    print(f"OPTFF : {optff_misses}")
+        print(f"FIFO  : {fifo_misses}")
+        print(f"LRU   : {lru_misses}")
+        print(f"OPTFF : {optff_misses}")
 
 if __name__ == "__main__":
     main()
