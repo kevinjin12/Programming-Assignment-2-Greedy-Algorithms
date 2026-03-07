@@ -1,4 +1,5 @@
 import random
+import heapq
 from collections import deque
 
 def fifo(k, requests):
@@ -38,7 +39,13 @@ def lru(k, requests):
             misses += 1
 
             if len(cache) == k:
-                cache.pop(next(iter(cache))) # Get first inserted key (lru element) and remove it
+                # Note even though we loop, this is O(1) because we break instantly, just to get the first key
+                # Made this more explicit and understandable
+                elem_to_remove = -1
+                for req in cache:
+                    elem_to_remove = req
+                    break
+                cache.pop(elem_to_remove)
 
             cache[r] = 1
 
@@ -52,28 +59,47 @@ def optff(k, requests):
             next_indx[r] = deque()
         next_indx[r].append(indx)
 
-    cache = set()
-    misses = 0
-    for r in requests:
+    # Essentially putting infinity as next index for requests that dont have a following index
+    for _, indices in next_indx.items():
+        indices.append(len(requests))
 
+    cache = set()
+    top_k_furthest = []
+    misses = 0
+
+    for indx, r in enumerate(requests):
+        
+        # Remove the current index, since we only want the next one
         next_indx[r].popleft()
 
         if r in cache:
+            # Use negative numbers since we want a max heap and python heaps are min by default
+            heapq.heappush(top_k_furthest, (-next_indx[r][0], r))
             continue
 
         misses += 1
         if len(cache) == k:
-            req_with_furthest_indx = -1
-            furthest_indx = -1
-
-            for elem in cache:
-                elem_next_indx = next_indx[elem][0] if next_indx[elem] else len(requests)
-                if elem_next_indx > furthest_indx:
-                    req_with_furthest_indx = elem
-                    furthest_indx = elem_next_indx
             
-            cache.remove(req_with_furthest_indx)
+            # improve to m log(k) by using heap to store the next indices for the every item currently in cache so we always determine furthest in log(k) instead of k
+            req_with_furthest_indx = -1
+            while len(top_k_furthest) > 0:
+                _, req_with_furthest_indx = heapq.heappop(top_k_furthest)
+                if req_with_furthest_indx in cache:
+                    break
+
+            # req_with_furthest_indx = -1
+            # furthest_indx = -1
+
+            # for elem in cache:
+            #     if next_indx[elem][0] > furthest_indx:
+            #         req_with_furthest_indx = elem
+            #         furthest_indx = next_indx[elem][0]
+            
+            # Shouldnt eveer be -1 in the first place, but because we defined it to be -1 before, this is just a safety check
+            if req_with_furthest_indx != -1:
+                cache.remove(req_with_furthest_indx)
         
+        heapq.heappush(top_k_furthest, (-next_indx[r][0], r))
         cache.add(r)
     
     return misses
@@ -92,7 +118,7 @@ def create_input_files(number_of_requests=50):
                 f.write(str(r) + " ") if i != len(random_requests) - 1 else f.write(str(r))
 
 def run_tests():
-    create_input_files()
+    # create_input_files()
     base_name = "../tests/"
     test_files = ["test1", "test2", "test3"]
 
